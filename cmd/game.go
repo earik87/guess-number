@@ -36,20 +36,27 @@ func runGame(cmd *cobra.Command, args []string) {
 	choice, _ := reader.ReadString('\n')
 	choice = strings.TrimSpace(choice)
 
+	// Add these type definitions at the top of the file after imports
+	type difficulty struct {
+		name    string
+		chances int
+	}
+
+	// Add this map as a package-level variable
+	var difficultyLevels = map[string]difficulty{
+		"1": {"Easy", 10},
+		"2": {"Medium", 5},
+		"3": {"Hard", 3},
+	}
+
+	// Then replace the switch statement in runGame with:
 	var chances int
-	switch choice {
-	case "1":
-		chances = 10
-		fmt.Println("\nYou selected Easy mode!")
-	case "2":
+	if level, exists := difficultyLevels[choice]; exists {
+		chances = level.chances
+		fmt.Printf("\nGreat! You have selected the %s difficulty level!\n", level.name)
+	} else {
 		chances = 5
-		fmt.Println("\nYou selected Medium mode!")
-	case "3":
-		chances = 3
-		fmt.Println("\nYou selected Hard mode!")
-	default:
 		fmt.Println("\nInvalid choice. Defaulting to Medium mode.")
-		chances = 5
 	}
 
 	target := rand.Intn(100) + 1
@@ -70,7 +77,7 @@ func runGame(cmd *cobra.Command, args []string) {
 		}
 
 		if guess == target {
-			fmt.Printf("\nCongratulations! You've guessed the number in %d tries!\n", i+1)
+			fmt.Printf("\nCongratulations! You've guessed the number in %d attempts!\n", i+1)
 			return
 		} else if guess < target {
 			fmt.Println("Too low! Try a higher number.")
