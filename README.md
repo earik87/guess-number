@@ -26,7 +26,7 @@
 
 Run the game using:
 ```bash
-go run guess-number game
+go run .
 ```
 
 ### How to Play
